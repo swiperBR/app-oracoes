@@ -170,7 +170,8 @@ else:
         # Em telas maiores (PC), exibir em duas colunas
         col1, col2 = st.columns(2)
         for i, video in enumerate(videos):
-            col = col1 if i % 2 == 0 else col2  # Alternar entre as colunas
+            # Alternar entre as colunas
+            col = col1 if i % 2 == 0 else col2
             with col:
                 st.write(f"**{video}**")
                 if video in descricoes:
