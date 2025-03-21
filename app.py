@@ -1,4 +1,6 @@
 import streamlit as st
+import os
+import json
 
 # Configuração da página
 st.set_page_config(
@@ -19,28 +21,28 @@ st.markdown(
         color: #4A90E2;
         text-align: center;
         font-family: 'Georgia', serif;
-        font-size: 2.5rem;
+        font-size: 2.5rem; /* Título maior para mobile */
     }
     h2 {
         color: #4A90E2;
         font-family: 'Georgia', serif;
-        font-size: 1.8rem;
+        font-size: 1.8rem; /* Subtítulo maior para mobile */
     }
     .stButton button {
         background-color: #4A90E2;
         color: white;
         border-radius: 5px;
-        padding: 15px 30px;
-        font-size: 18px;
+        padding: 15px 30px; /* Botões maiores para mobile */
+        font-size: 18px; /* Texto maior para mobile */
         font-family: 'Georgia', serif;
-        width: 100%;
+        width: 100%; /* Botão ocupa toda a largura */
     }
     .stVideo {
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
+        width: 100%; /* Vídeo ocupa toda a largura */
+        max-width: 600px; /* Largura máxima para o player de vídeo */
+        margin: 0 auto; /* Centraliza o player */
     }
     .stSidebar {
         background-color: #4A90E2;
@@ -50,33 +52,36 @@ st.markdown(
     .stSidebar .stMarkdown {
         color: white;
     }
+    /* Estilo personalizado para o botão de download */
     .stDownloadButton button {
-        background-color: #FF0000;
+        background-color: #FF0000; /* Vermelho */
         color: white;
         border-radius: 5px;
-        padding: 15px 30px;
-        font-size: 18px;
+        padding: 15px 30px; /* Botão maior para mobile */
+        font-size: 18px; /* Texto maior para mobile */
         font-family: 'Georgia', serif;
-        width: 100%;
+        width: 100%; /* Botão ocupa toda a largura */
     }
+    /* Centralizar a imagem */
     .center-image {
         display: flex;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 20px; /* Espaçamento abaixo da imagem */
     }
+    /* Ajustes para telas pequenas */
     @media (max-width: 768px) {
         h1 {
-            font-size: 2rem;
+            font-size: 2rem; /* Título menor em telas pequenas */
         }
         h2 {
-            font-size: 1.5rem;
+            font-size: 1.5rem; /* Subtítulo menor em telas pequenas */
         }
         .stButton button, .stDownloadButton button {
-            padding: 12px 24px;
-            font-size: 16px;
+            padding: 12px 24px; /* Botões um pouco menores em telas pequenas */
+            font-size: 16px; /* Texto um pouco menor em telas pequenas */
         }
         .stVideo {
-            max-width: 100%;
+            max-width: 100%; /* Player ocupa toda a largura em mobile */
         }
     }
     </style>
@@ -96,130 +101,112 @@ st.markdown("---")
 # Menu lateral
 with st.sidebar:
     st.title("Menu")
-    st.write("Bem-vinda ao app das 40 Orações do Arcanjo Miguel!")
+    st.write("Bem-vindos ao app das 40 Orações do Arcanjo Miguel com Frei Gilson!")
     if st.button("Sobre"):
         st.write("Este app foi criado para ajudar você a se conectar com as poderosas orações do Arcanjo Miguel.")
     if st.button("Contato"):
         st.write("Para mais informações, entre em contato: contato@arcanjo.com")
 
-# Lista de vídeos com códigos de embed da Vturb
-videos = {
-    "1 - Oração de Proteção": """
-    <div id="vid_67dd99d49f4fcc238c477086" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd99d49f4fcc238c477086" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd99d49f4fcc238c477086/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd99d49f4fcc238c477086" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd99d49f4fcc238c477086">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd99d49f4fcc238c477086/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "2 - Oração da Espada de São Miguel": """
-    <div id="vid_67dd99e56a136f4cd86847ed" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd99e56a136f4cd86847ed" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd99e56a136f4cd86847ed/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd99e56a136f4cd86847ed" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd99e56a136f4cd86847ed">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd99e56a136f4cd86847ed/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "3 - Oração para Força e Coragem": """
-    <div id="vid_67dd99f39f4fcc238c4770bd" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd99f39f4fcc238c4770bd" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd99f39f4fcc238c4770bd/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd99f39f4fcc238c4770bd" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd99f39f4fcc238c4770bd">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd99f39f4fcc238c4770bd/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "4 - Oração Contra Inimigos Espirituais": """
-    <div id="vid_67dd9a020eb49eca9740090c" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd9a020eb49eca9740090c" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a020eb49eca9740090c/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd9a020eb49eca9740090c" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd9a020eb49eca9740090c">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a020eb49eca9740090c/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "5 - Oração para Abrir Caminhos": """
-    <div id="vid_67dd9a2422fea58712cd1b23" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd9a2422fea58712cd1b23" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a2422fea58712cd1b23/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd9a2422fea58712cd1b23" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd9a2422fea58712cd1b23">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a2422fea58712cd1b23/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "6 - Oração de Libertação": """
-    <div id="vid_67dd9a416a136f4cd8684845" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd9a416a136f4cd8684845" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a416a136f4cd8684845/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd9a416a136f4cd8684845" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd9a416a136f4cd8684845">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a416a136f4cd8684845/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "7 - Oração para Paz e Harmonia": """
-    <div id="vid_67dd9a5a645071bc70b83f9d" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd9a5a645071bc70b83f9d" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a5a645071bc70b83f9d/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd9a5a645071bc70b83f9d" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd9a5a645071bc70b83f9d">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a5a645071bc70b83f9d/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "8 - Oração para a Noite": """
-    <div id="vid_67dd9a749f4fcc238c477128" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd9a749f4fcc238c477128" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a749f4fcc238c477128/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd9a749f4fcc238c477128" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd9a749f4fcc238c477128">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a749f4fcc238c477128/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "9 - Oração para Tomada de Decisões": """
-    <div id="vid_67dd9a7c2a9e96efc2787324" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd9a7c2a9e96efc2787324" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a7c2a9e96efc2787324/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd9a7c2a9e96efc2787324" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd9a7c2a9e96efc2787324">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a7c2a9e96efc2787324/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    "10 - Oração de Agradecimento": """
-    <div id="vid_67dd9a6c9f4fcc238c47711a" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0;">
-      <img id="thumb_67dd9a6c9f4fcc238c47711a" src="https://images.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a6c9f4fcc238c47711a/thumbnail.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;" alt="thumbnail">
-      <div id="backdrop_67dd9a6c9f4fcc238c47711a" style="-webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%;"></div>
-    </div>
-    <script type="text/javascript" id="scr_67dd9a6c9f4fcc238c47711a">
-      var s=document.createElement("script");
-      s.src="https://scripts.converteai.net/5c08f4fa-db53-4297-ace5-9c47f4306a40/players/67dd9a6c9f4fcc238c47711a/player.js";
-      s.async=!0,document.head.appendChild(s);
-    </script>
-    """,
-    # Adicione os outros 30 vídeos aqui...
-}
+# Função para extrair o número do nome do arquivo
+def extrair_numero(nome_arquivo):
+    try:
+        # Extrai o número no início do nome do arquivo
+        return int(nome_arquivo.split(".")[0].split(" ")[0])
+    except ValueError:
+        # Se não houver número, retorna um valor alto para colocar no final da lista
+        return float('inf')
 
-# Exibir a lista de vídeos
-st.write("### Escolha uma oração para assistir:")
-for nome, embed_code in videos.items():
-    st.write(f"**{nome}**")
-    st.markdown(embed_code, unsafe_allow_html=True)
-    st.markdown("---")
+# Listar os vídeos na pasta atual (mesma pasta do app.py) e ordenar pelo número
+videos = sorted(
+    [f for f in os.listdir() if f.endswith(".mp4")],
+    key=extrair_numero
+)
+
+# Carregar descrições das orações (se existir)
+descricoes = {}
+if os.path.exists("descricoes.json"):
+    with open("descricoes.json", "r", encoding="utf-8") as f:
+        descricoes = json.load(f)
+
+# Verificar se há vídeos
+if not videos:
+    st.error("Nenhum vídeo encontrado na pasta atual.")
+else:
+    # Exibir a lista de vídeos
+    st.write("### Escolha uma oração para assistir:")
+
+    # Em telas pequenas (mobile), exibir em uma única coluna
+    if st.session_state.get("is_mobile", False):  # Verifica se é mobile
+        for video in videos:
+            st.write(f"**{video}**")
+            if video in descricoes:
+                st.write(descricoes[video])
+            st.video(video, format="video/mp4", start_time=0)
+
+            # Botão de download com estilo personalizado
+            with open(video, "rb") as file:
+                st.markdown(
+                    """
+                    <style>
+                    .stDownloadButton button {
+                        background-color: #FF0000; /* Vermelho */
+                        color: white;
+                        border-radius: 5px;
+                        padding: 15px 30px; /* Botão maior para mobile */
+                        font-size: 18px; /* Texto maior para mobile */
+                        font-family: 'Georgia', serif;
+                        width: 100%; /* Botão ocupa toda a largura */
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                btn = st.download_button(
+                    label=f"Baixar {video}",
+                    data=file,
+                    file_name=video,
+                    mime="video/mp4",
+                    key=f"download_{video}",  # Chave única para cada botão
+                )
+            st.markdown("---")
+    else:
+        # Em telas maiores (PC), exibir em duas colunas
+        col1, col2 = st.columns(2)
+        for i, video in enumerate(videos):
+            if i % 2 == 0:
+                col = col1
+            else:
+                col = col2
+            
+            with col:
+                st.write(f"**{video}**")
+                if video in descricoes:
+                    st.write(descricoes[video])
+                st.video(video, format="video/mp4", start_time=0)
+
+                # Botão de download com estilo personalizado
+                with open(video, "rb") as file:
+                    st.markdown(
+                        """
+                        <style>
+                        .stDownloadButton button {
+                            background-color: #FF0000; /* Vermelho */
+                            color: white;
+                            border-radius: 5px;
+                            padding: 15px 30px; /* Botão maior para mobile */
+                            font-size: 18px; /* Texto maior para mobile */
+                            font-family: 'Georgia', serif;
+                            width: 100%; /* Botão ocupa toda a largura */
+                        }
+                        </style>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                    btn = st.download_button(
+                        label=f"Baixar {video}",
+                        data=file,
+                        file_name=video,
+                        mime="video/mp4",
+                        key=f"download_{video}",  # Chave única para cada botão
+                    )
+                st.markdown("---")
