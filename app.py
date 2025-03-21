@@ -4,7 +4,7 @@ import json
 
 # Configuração da página
 st.set_page_config(
-    page_title="40 Orações do Arcanjo Miguel",
+    page_title="40 Orações do Arcanjo Miguel com FREI GILSON",  # Título atualizado
     page_icon="✨",
     layout="wide",
 )
@@ -84,6 +84,13 @@ st.markdown(
             max-width: 100%; /* Player ocupa toda a largura em mobile */
         }
     }
+    /* Estilo para a mensagem de carregamento */
+    .loading-message {
+        font-size: 0.9rem;
+        color: #666;
+        text-align: center;
+        margin-bottom: 20px;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -95,7 +102,7 @@ st.image("sao_miguel.jpg", width=100)  # Certifique-se de que o arquivo está na
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Título do app
-st.title("40 Orações do Arcanjo Miguel")
+st.title("40 Orações do Arcanjo Miguel com FREI GILSON")  # Título atualizado
 st.markdown("---")
 
 # Menu lateral
@@ -141,9 +148,14 @@ else:
     # Exibir a lista de vídeos
     st.write("### Escolha uma oração para assistir:")
 
+    # Mensagem de carregamento
+    st.markdown('<div class="loading-message">Aguarde alguns segundos para carregar os vídeos...</div>', unsafe_allow_html=True)
+
     # Verificar se é mobile
     def is_mobile():
-        return st.session_state.get("is_mobile", False)
+        # Verifica o user-agent para detectar dispositivos móveis
+        user_agent = st.experimental_get_query_params().get("user_agent", [""])[0]
+        return "mobi" in user_agent.lower()
 
     # Em telas pequenas (mobile), exibir em uma única coluna
     if is_mobile():
