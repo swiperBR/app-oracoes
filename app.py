@@ -154,7 +154,7 @@ else:
     # Verificar se é mobile
     def is_mobile():
         # Verifica o user-agent para detectar dispositivos móveis
-        user_agent = st.experimental_get_query_params().get("user_agent", [""])[0]
+        user_agent = st.query_params().get("user_agent", [""])[0]
         return "mobi" in user_agent.lower()
 
     # Em telas pequenas (mobile), exibir em uma única coluna
