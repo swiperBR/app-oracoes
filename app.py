@@ -116,6 +116,12 @@ def extrair_numero(nome_arquivo):
         # Se não houver número, retorna um valor alto para colocar no final da lista
         return float('inf')
 
+# Função para carregar vídeos com cache
+@st.cache_data
+def load_video(video_path):
+    with open(video_path, "rb") as file:
+        return file.read()
+
 # Listar os vídeos na pasta atual (mesma pasta do app.py) e ordenar pelo número
 videos = sorted(
     [f for f in os.listdir() if f.endswith(".mp4")],
@@ -135,78 +141,52 @@ else:
     # Exibir a lista de vídeos
     st.write("### Escolha uma oração para assistir:")
 
+    # Verificar se é mobile
+    def is_mobile():
+        return st.session_state.get("is_mobile", False)
+
     # Em telas pequenas (mobile), exibir em uma única coluna
-    if st.session_state.get("is_mobile", False):  # Verifica se é mobile
+    if is_mobile():
         for video in videos:
             st.write(f"**{video}**")
             if video in descricoes:
                 st.write(descricoes[video])
-            st.video(video, format="video/mp4", start_time=0)
+            
+            # Carregar vídeo com cache
+            video_data = load_video(video)
+            st.video(video_data, format="video/mp4", start_time=0)
 
-            # Botão de download com estilo personalizado
+            # Botão de download
             with open(video, "rb") as file:
-                st.markdown(
-                    """
-                    <style>
-                    .stDownloadButton button {
-                        background-color: #FF0000; /* Vermelho */
-                        color: white;
-                        border-radius: 5px;
-                        padding: 15px 30px; /* Botão maior para mobile */
-                        font-size: 18px; /* Texto maior para mobile */
-                        font-family: 'Georgia', serif;
-                        width: 100%; /* Botão ocupa toda a largura */
-                    }
-                    </style>
-                    """,
-                    unsafe_allow_html=True,
-                )
                 btn = st.download_button(
                     label=f"Baixar {video}",
                     data=file,
                     file_name=video,
                     mime="video/mp4",
-                    key=f"download_{video}",  # Chave única para cada botão
+                    key=f"download_{video}",
                 )
             st.markdown("---")
     else:
         # Em telas maiores (PC), exibir em duas colunas
         col1, col2 = st.columns(2)
         for i, video in enumerate(videos):
-            if i % 2 == 0:
-                col = col1
-            else:
-                col = col2
-            
+            col = col1 if i % 2 == 0 else col2  # Alternar entre as colunas
             with col:
                 st.write(f"**{video}**")
                 if video in descricoes:
                     st.write(descricoes[video])
-                st.video(video, format="video/mp4", start_time=0)
+                
+                # Carregar vídeo com cache
+                video_data = load_video(video)
+                st.video(video_data, format="video/mp4", start_time=0)
 
-                # Botão de download com estilo personalizado
+                # Botão de download
                 with open(video, "rb") as file:
-                    st.markdown(
-                        """
-                        <style>
-                        .stDownloadButton button {
-                            background-color: #FF0000; /* Vermelho */
-                            color: white;
-                            border-radius: 5px;
-                            padding: 15px 30px; /* Botão maior para mobile */
-                            font-size: 18px; /* Texto maior para mobile */
-                            font-family: 'Georgia', serif;
-                            width: 100%; /* Botão ocupa toda a largura */
-                        }
-                        </style>
-                        """,
-                        unsafe_allow_html=True,
-                    )
                     btn = st.download_button(
                         label=f"Baixar {video}",
                         data=file,
                         file_name=video,
                         mime="video/mp4",
-                        key=f"download_{video}",  # Chave única para cada botão
+                        key=f"download_{video}",
                     )
                 st.markdown("---")
