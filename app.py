@@ -151,55 +151,23 @@ else:
     # Mensagem de carregamento
     st.markdown('<div class="loading-message">Aguarde alguns segundos para carregar os vídeos...</div>', unsafe_allow_html=True)
 
-    # Verificar se é mobile
-    def is_mobile():
-        # Verifica o user-agent para detectar dispositivos móveis
-        user_agent = st.query_params().get("user_agent", [""])[0]
-        return "mobi" in user_agent.lower()
+    # Exibir vídeos em uma única coluna
+    for video in videos:
+        st.write(f"**{video}**")
+        if video in descricoes:
+            st.write(descricoes[video])
+        
+        # Carregar vídeo com cache
+        video_data = load_video(video)
+        st.video(video_data, format="video/mp4", start_time=0)
 
-    # Em telas pequenas (mobile), exibir em uma única coluna
-    if is_mobile():
-        for video in videos:
-            st.write(f"**{video}**")
-            if video in descricoes:
-                st.write(descricoes[video])
-            
-            # Carregar vídeo com cache
-            video_data = load_video(video)
-            st.video(video_data, format="video/mp4", start_time=0)
-
-            # Botão de download
-            with open(video, "rb") as file:
-                btn = st.download_button(
-                    label=f"Baixar {video}",
-                    data=file,
-                    file_name=video,
-                    mime="video/mp4",
-                    key=f"download_{video}",
-                )
-            st.markdown("---")
-    else:
-        # Em telas maiores (PC), exibir em duas colunas
-        col1, col2 = st.columns(2)
-        for i, video in enumerate(videos):
-            # Alternar entre as colunas
-            col = col1 if i % 2 == 0 else col2
-            with col:
-                st.write(f"**{video}**")
-                if video in descricoes:
-                    st.write(descricoes[video])
-                
-                # Carregar vídeo com cache
-                video_data = load_video(video)
-                st.video(video_data, format="video/mp4", start_time=0)
-
-                # Botão de download
-                with open(video, "rb") as file:
-                    btn = st.download_button(
-                        label=f"Baixar {video}",
-                        data=file,
-                        file_name=video,
-                        mime="video/mp4",
-                        key=f"download_{video}",
-                    )
-                st.markdown("---")
+        # Botão de download
+        with open(video, "rb") as file:
+            btn = st.download_button(
+                label=f"Baixar {video}",
+                data=file,
+                file_name=video,
+                mime="video/mp4",
+                key=f"download_{video}",
+            )
+        st.markdown("---")
